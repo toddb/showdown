@@ -71,6 +71,8 @@ if (path.existsSync('test/extensions')) {
 
         // Run tests in each extension sub-folder
         showdown.forEach(extensions, function(ext){
+            // exclude the tagging extension
+            if (ext == 'tagging') return;
             // Make sure extension exists
             var src = 'src/extensions/' + ext + '.js';
             if (!path.existsSync(src)) {
@@ -81,6 +83,28 @@ if (path.existsSync('test/extensions')) {
             var dir = 'test/extensions/' + ext;
             runTestsInDir(dir, converter);
         });
+    });
+
+}
+
+
+//
+// :: Tagging Extensions Testing ::
+//
+
+if (path.existsSync('test/extensions/tagging')) {
+
+    describe('extension - tagging', function() {
+            // Make sure extension exists
+            var src = 'src/extensions/tagging.js';
+            if (!path.existsSync(src)) {
+                throw "Attempting tests for 'tagging' but source file (" + src + ") was not found.";
+            }
+
+            var opts = { condition: 'a' };
+            var converter = new showdown.converter({ extensions: [ 'tagging' ], options: opts });
+            var dir = 'test/extensions/tagging';
+            runTestsInDir(dir, converter);
     });
 
 }
