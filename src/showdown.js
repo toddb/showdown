@@ -229,7 +229,7 @@ if (converter_options && converter_options.extensions) {
 
 		if (typeof plugin === 'function') {
 			// Iterate over each extension within that plugin
-			Showdown.forEach(plugin(self), function(ext){
+			Showdown.forEach(plugin(self, converter_options.options || {}), function(ext){
 				// Sort extensions by type
 				if (ext.type) {
 					if (ext.type === 'language' || ext.type === 'lang') {
