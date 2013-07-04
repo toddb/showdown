@@ -1,6 +1,8 @@
 |--
 ^^ Heading
-this is some code
-^^ Another Heading
+this is some more code
+
+^^ AnotherHeading
 *bold*
+
 --|

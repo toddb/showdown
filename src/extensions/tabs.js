@@ -25,14 +25,22 @@
       return text.replace(/(?:^|\n)\|\-\-\n([\s\S]*?)\n\-\-\|/g,
         function (wholeMatch, tabcontent) {
 
-          tabcontent = tabcontent.replace(/(?:^|\n)\^\^[\s]*(.*)\n(.*)/g,
-            function (wholeMatch, heading, content) {
-              return '<div class="tab-pane well" title="' + heading + '">' +
-                converter.makeHtml(content) +
-                '</div>\n'
-            });
+          /* KLUDGE: regex wasn't working so wrote simplex parser */
+          var lines = [];
+          tabcontent.split("^^ ").forEach(function (tab) {
+            if (tab != "") {
+              var match = /^(.*)\n(.*)/g.exec(tab)
+              var heading = match[1];
+              var content = match.input.substr(heading.length);
 
-          return '<div class="tabbable" show="true">\n' + tabcontent + '</div>';
+              lines.push('<div class="tab-pane well" title="' + heading + '">' +
+                converter.makeHtml(content) +
+                '</div>\n');
+
+            }
+          })
+
+          return '<div class="tabbable" show="true">\n' + lines.join("") + '</div>';
         }
       );
 
