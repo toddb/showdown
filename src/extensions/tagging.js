@@ -18,6 +18,14 @@
  *  exclude me when handing in condition->a in options
  *  @#
  *
+ *  @#a|b
+ *  exclude me when neither a or b
+ *  @#
+ *
+ *  Note:
+ *    - tags can span multiple lines
+ *    - multiple tags per line
+ *    - no nesting
  */
 
 (function () {
@@ -35,9 +43,10 @@
         type: 'lang',
         filter: function (text) {
           if (!options && !options.condition) return text;
-          return text.replace(/(@#)([a-z]+)([^\1]+?)\1/gmi,
+          return text.replace(/(@#)([a-z\|]+)([^\1]+?)\1/gmi,
             function (wholeMatch, md, tag, content) {
-              return (tag == options.condition) ? content : "";
+              // simple match on tag as string compare rather than iterate on delimiter
+              return (tag.indexOf(options.condition) != -1) ? content : "";
             })
         }
       }
