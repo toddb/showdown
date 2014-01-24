@@ -26,7 +26,7 @@
     return [
       { type: 'output', filter: function (source) {
         if (!options && !options.condition) return source;
-        return source.replace(/<(\w+)\s+tag=['|"](.*)['|"].*?>(.*?)<\/.*?>/ig,
+        return source.replace(/<(\w+)\s+tag=['|"](.*)['|"].*?>(.*?)<\/.*?>/igm,
           function (wholeMatch, elem, tag, content) {
             return (tag == options.condition) ? "<" + elem + ">" + content + "</" + elem + ">" : "";
           });
@@ -35,9 +35,9 @@
         type: 'lang',
         filter: function (text) {
           if (!options && !options.condition) return text;
-          return text.replace(/(?:^|\n)@#([\s\S]*?)\n(.*)\n@#/g,
-            function (wholeMatch, tag, content) {
-              return (tag == options.condition) ? converter.makeHtml(content) : "";
+          return text.replace(/(@#)([a-z]+)([^\1]+?)\1/gmi,
+            function (wholeMatch, md, tag, content) {
+              return (tag == options.condition) ? content : "";
             })
         }
       }
