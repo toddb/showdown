@@ -31,13 +31,29 @@
 
 (function () {
 
+  var isTagged = function(tag, condition){
+    var hasTag = false
+    var tags = tag.split('|')
+    for (var i=0; i<tags.length; ++i){
+      if (tags[i] == condition){
+        hasTag = true;
+        continue
+      }
+    }
+    return hasTag
+  }
+
   var tagging = function (converter, options) {
     return [
       { type: 'output', filter: function (source) {
         if (!options && !options.condition) return source;
-        return source.replace(/<(\w+)\s+tag=['|"](.*)['|"].*?>(.*?)<\/.*?>/igm,
+        return source.replace(/<([a-z]+)\s+tag=['|"]([^"|^']).*?>(.*?)<\/[^\1]+?>/igm,
           function (wholeMatch, elem, tag, content) {
-            return (tag == options.condition) ? "<" + elem + ">" + content + "</" + elem + ">" : "";
+            return isTagged(tag, options.condition)
+                ? elem.toLowerCase() == 'span'
+                  ? content
+                  : "<" + elem + ">" + content + "</" + elem + ">"
+                : "";
           });
       }},
       {
@@ -46,15 +62,7 @@
           if (!options && !options.condition) return text;
           return text.replace(/(@#)([a-z\|]+)([^\1]+?)\1/gmi,
             function (wholeMatch, md, tag, content) {
-              var hasTag = false
-              var tags = tag.split('|')
-              for (var i=0; i<tags.length; ++i){
-                if (tags[i] == options.condition){
-                  hasTag = true;
-                  continue
-                }
-              }
-              return (hasTag) ? content : "";
+              return isTagged(tag, options.condition) ? content : "";
             })
         }
       }
