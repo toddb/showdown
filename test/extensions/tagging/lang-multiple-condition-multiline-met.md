@@ -10,6 +10,6 @@ fd
 
 @#a Editors: Me@#, them
 
-This@#a is@# a piece of@#a text with@# two tags
+This@#a is@# a piece of@#a|b text with@# two tags
 
 @#a whole line@#

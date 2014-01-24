@@ -26,6 +26,7 @@
  *    - tags can span multiple lines
  *    - multiple tags per line
  *    - no nesting
+ *    - names of tags can delimited by a bar ('|')
  */
 
 (function () {
@@ -45,8 +46,15 @@
           if (!options && !options.condition) return text;
           return text.replace(/(@#)([a-z\|]+)([^\1]+?)\1/gmi,
             function (wholeMatch, md, tag, content) {
-              // simple match on tag as string compare rather than iterate on delimiter
-              return (tag.indexOf(options.condition) != -1) ? content : "";
+              var hasTag = false
+              var tags = tag.split('|')
+              for (var i=0; i<tags.length; ++i){
+                if (tags[i] == options.condition){
+                  hasTag = true;
+                  continue
+                }
+              }
+              return (hasTag) ? content : "";
             })
         }
       }
